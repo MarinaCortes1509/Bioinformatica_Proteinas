@@ -49,7 +49,7 @@ menu_option = st.sidebar.selectbox(
 if menu_option == "Inicio":
    
     st.markdown("<h1 class='title'>Procesos Fundamentales de Expresión Génica y Síntesis de Proteínas</h1>", unsafe_allow_html=True)
-    st.image("C:/Users/marin/codigo/app_proteins/py/imagen proteina/pixelcut-export.png", use_container_width=True)
+    st.image("./pixelcut-export.png", use_container_width=True)
     
     st.markdown("""
         ### Introducción a la Aplicación
