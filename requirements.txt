@@ -1,5 +1,3 @@
 streamlit
-Bio.Seq 
-io
-matplotlib.pyplot
-mpl_toolkits.mplot3d 
+biopython
+matplotlib
