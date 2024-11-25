@@ -5,8 +5,6 @@ from io import StringIO
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-
-# Estilos personalizados con Markdown
 st.markdown("""
     <style>
     .stSidebar {
@@ -35,12 +33,11 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# Inicializar el estado de la aplicación
 if "sequence" not in st.session_state:
     st.session_state["sequence"] = None
 
 if "resultados" not in st.session_state:
-    st.session_state["resultados"] = StringIO()  # Contenedor para los resultados
+    st.session_state["resultados"] = StringIO()  
 
 # Opciones del menú
 st.sidebar.header("Menú Principal")
@@ -50,7 +47,7 @@ menu_option = st.sidebar.selectbox(
 )
 
 if menu_option == "Inicio":
-    # Mostrar el título y la imagen solo en la pestaña de inicio
+   
     st.markdown("<h1 class='title'>Procesos Fundamentales de Expresión Génica y Síntesis de Proteínas</h1>", unsafe_allow_html=True)
     st.image("C:/Users/marin/codigo/app_proteins/py/imagen proteina/pixelcut-export.png", use_container_width=True)
     
@@ -79,13 +76,13 @@ elif menu_option == "Cargar Secuencia":
     uploaded_file = st.file_uploader("Sube un archivo con una secuencia (formato FASTA o texto)", type=["txt", "fasta"])
 
     if uploaded_file:
-        # Leer el archivo cargado
+       
         content = uploaded_file.getvalue().decode("utf-8")
         st.text_area("Contenido del archivo:", content, height=200)
 
-        # Guardar la secuencia cargada en una variable
-        sequence = "".join(content.splitlines()[1:])  # Ignorar la línea de encabezado en FASTA
-        st.session_state["sequence"] = sequence  # Guardar en la sesión
+        
+        sequence = "".join(content.splitlines()[1:])  
+        st.session_state["sequence"] = sequence 
         st.success("✅ Secuencia cargada con éxito.")
 
 elif menu_option == "Procesar Secuencia":
@@ -95,20 +92,20 @@ elif menu_option == "Procesar Secuencia":
         sequence = st.session_state["sequence"]
         st.write(f"Secuencia actual: `{sequence}`")
 
-        # Crear un objeto Seq
+        
         bio_seq = Seq(sequence)
 
-        # Mostrar análisis básico
+     
         st.write("**Resultados del análisis:**")
         st.write(f"- Longitud: {len(bio_seq)}")
         st.write(f"- Complementaria: {bio_seq.complement()}")
         st.write(f"- Transcrita: {bio_seq.transcribe()}")
 
-        # Verificar si la longitud es divisible por 3
+        
         if len(bio_seq) % 3 != 0:
             st.warning("⚠️ La longitud de la secuencia no es múltiplo de 3. La traducción podría no ser correcta.")
 
-        # Intentar traducir la secuencia
+        
         try:
             translated = bio_seq.translate(to_stop=True)
             st.write(f"- Traducida: {translated}")
@@ -116,8 +113,8 @@ elif menu_option == "Procesar Secuencia":
             st.error(f"⚠️ Error durante la traducción: {str(e)}")
             translated = "Error en la traducción"
 
-        # Escribir resultados en el contenedor del estado
-        st.session_state["resultados"] = StringIO()  # Reiniciar
+       
+        st.session_state["resultados"] = StringIO()  
         resultados = st.session_state["resultados"]
         resultados.write("Resultados del análisis de la secuencia:\n")
         resultados.write(f"Secuencia original: {sequence}\n")
@@ -131,22 +128,22 @@ elif menu_option == "Procesar Secuencia":
 elif menu_option == "Visualizar Proteína en 3D":
     st.markdown("<h2 class='subtitle'>Visualizar una proteína en 3D</h2>", unsafe_allow_html=True)
 
-    # Subir un archivo PDB
+   
     pdb_file = st.file_uploader("Sube un archivo en formato PDB", type=["pdb"])
 
     if pdb_file:
         pdb_content = pdb_file.getvalue().decode("utf-8")
 
-        # Parsear las coordenadas de átomos desde el archivo PDB
+       
         atom_coordinates = []
         for line in pdb_content.splitlines():
-            if line.startswith("ATOM"):  # Buscar líneas que contengan átomos
+            if line.startswith("ATOM"):  
                 x = float(line[30:38].strip())  # Coordenada X
                 y = float(line[38:46].strip())  # Coordenada Y
                 z = float(line[46:54].strip())  # Coordenada Z
                 atom_coordinates.append((x, y, z))
 
-        # Separar las coordenadas en listas
+      
         xs, ys, zs = zip(*atom_coordinates)
 
         # Visualizar en 3D usando Matplotlib
@@ -166,7 +163,7 @@ elif menu_option == "Visualizar Proteína en 3D":
 elif menu_option == "Descargar Resultados":
     st.markdown("<h2 class='subtitle'>Descargar Resultados del Análisis</h2>", unsafe_allow_html=True)
 
-    if st.session_state["resultados"].getvalue():  # Verificar si hay contenido en resultados
+    if st.session_state["resultados"].getvalue():  
         st.download_button(
             label="Descargar resultados",
             data=st.session_state["resultados"].getvalue(),
